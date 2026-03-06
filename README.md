@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Documentación Técnica - CI/CD DevOps
 
 ## Estructura del Proyecto
@@ -209,3 +210,6 @@ Respuesta esperada:
 docker stop devops-app
 docker rm devops-app
 ```
+=======
+# python
+>>>>>>> 9ff299a35ce648da2779292e9aea3065a8c6ed67
