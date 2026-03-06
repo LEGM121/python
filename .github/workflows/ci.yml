@@ -1,0 +1,37 @@
+# Pipeline CI - Integración Continua
+# Se ejecuta automáticamente en cada push o pull request a la rama main
+
+name: CI - Integración Continua
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Stage 1: Checkout del código
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      # Stage 2: Configurar Python
+      - name: Configurar Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      # Stage 3: Instalación de dependencias
+      - name: Instalación de dependencias
+        run: pip install -r requirements.txt
+
+      # Stage 4: Ejecución de pruebas
+      - name: Ejecución de pruebas
+        run: pytest tests/ -v
+
+      # Stage 5: Verificar que la imagen Docker se construye correctamente
+      - name: Build imagen Docker
+        run: docker build -t devops-app .
