@@ -24,10 +24,10 @@ pipeline {
     // Stage 2: Construir la imagen Docker
     stage('Construir imagen Docker') {
       steps {
-        sh 'docker build -t ' + env.C_IMAGE_NAME + ':' + env.C_IMAGE_TAG + ' .'
-      }
-    }
+        sh 'DOCKER_BUILDKIT=1 docker build -t luisgo121:latest .'
 
+            }
+          }
     // Stage 3: Publicar la imagen en DockerHub
     stage('Publicar imagen en DockerHub') {
       steps {
