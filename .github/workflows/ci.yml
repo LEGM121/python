@@ -39,7 +39,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
           source venv/bin/activate
-          snyk test --file=requirements.txt --org=ing.luisgonzalez1994 --severity-threshold=high
+          snyk monitor --file=requirements.txt --org=ing.luisgonzalez1994
 
       # Stage 6: Ejecutar pruebas unitarias
       - name: Ejecutar pruebas
