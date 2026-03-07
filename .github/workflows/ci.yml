@@ -15,7 +15,7 @@ jobs:
       - name: Checkout del código
         uses: actions/checkout@v4
 
-      # Stage 2: Configurar Python 3.13
+      # Stage 2: Configurar Python
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
@@ -37,9 +37,9 @@ jobs:
       - name: Escaneo de vulnerabilidades con Snyk
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          run: snyk orgs
         run: |
           source venv/bin/activate
+          snyk orgs        # Opcional: verifica acceso a tu organización
           snyk test --file=requirements.txt --org=ing.luisgonzalez1994 --severity-threshold=high
 
       # Stage 6: Ejecutar pruebas unitarias
@@ -51,3 +51,4 @@ jobs:
       # Stage 7: Construir imagen Docker
       - name: Build imagen Docker
         run: docker build -t devops-app .
+      
