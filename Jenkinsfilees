@@ -1,0 +1,67 @@
+
+// Pipeline CD - Entrega Continua
+// Define los stages para construir y publicar la imagen Docker en DockerHub
+
+pipeline {
+  agent any
+
+  // Variables del pipeline
+  environment {
+    C_IMAGE_NAME      = 'luisgo121'
+    C_IMAGE_TAG       = 'latest'
+    C_REPO_URL        = 'https://github.com/LEGM121/python.git'
+    C_DOCKER_REGISTRY = 'docker.io'
+  }
+
+  stages {
+    stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                    sonar-scanner \
+                    -Dsonar.projectKey=python-app \
+                    -Dsonar.sources=. \
+                    -Dsonar.host.url=http://sonarqube:9000
+                    '''
+                }
+            }
+        
+    // Stage 1: Clonar el repositorio
+    stage('Clonar repositorio') {
+      steps {
+        git branch: 'main', url: env.C_REPO_URL
+      }
+    }
+
+    // Stage 2: Construir la imagen Docker
+    stage('Construir imagen Docker') {
+      steps {
+        sh 'docker build -t luisgo121:latest .'
+
+            }
+          }
+    // Stage 3: Publicar la imagen en DockerHub
+    stage('Publicar imagen en DockerHub') {
+      steps {
+        withCredentials([
+          string(credentialsId: 'dockerhub-user', variable: 'V_DOCKER_USER'),
+          string(credentialsId: 'dockerhub-pass', variable: 'V_DOCKER_PASS')
+        ]) {
+          sh 'echo $V_DOCKER_PASS | docker login ' + env.C_DOCKER_REGISTRY + ' -u $V_DOCKER_USER --password-stdin'
+          sh 'docker tag ' + env.C_IMAGE_NAME + ':' + env.C_IMAGE_TAG + ' $V_DOCKER_USER/' + env.C_IMAGE_NAME + ':' + env.C_IMAGE_TAG
+          sh 'docker push $V_DOCKER_USER/' + env.C_IMAGE_NAME + ':' + env.C_IMAGE_TAG
+        }
+      }
+    }
+
+  }
+
+  post {
+    success {
+      echo 'Pipeline CD ejecutado correctamente'
+    }
+    failure {
+      echo 'Pipeline CD falló'
+    }
+  }
+}
