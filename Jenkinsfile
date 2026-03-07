@@ -19,7 +19,7 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     sh '''
                     sonar-scanner \
-                    -Dsonar.projectKey=python-app \
+                    -Dsonar.projectKey=python-main\
                     -Dsonar.sources=. \
                     -Dsonar.host.url=http://sonarqube:9000
                     '''
