@@ -24,7 +24,7 @@ pipeline {
     // Stage 2: Construir la imagen Docker
     stage('Construir imagen Docker') {
       steps {
-        sh 'DOCKER_BUILDKIT=1 docker build -t luisgo121:latest .'
+        sh 'docker build -t luisgo121:latest .'
 
             }
           }
