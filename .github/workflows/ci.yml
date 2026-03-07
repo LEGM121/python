@@ -39,7 +39,6 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
           source venv/bin/activate
-          snyk orgs        # Opcional: verifica acceso a tu organización
           snyk test --file=requirements.txt --org=ing.luisgonzalez1994 --severity-threshold=high
 
       # Stage 6: Ejecutar pruebas unitarias
