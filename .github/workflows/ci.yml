@@ -15,15 +15,19 @@ jobs:
       - name: Checkout del código
         uses: actions/checkout@v4
 
-      # Stage 2: Configurar Python
-      - name: Configurar Python 3.13
+      # Stage 2: Configurar Python 3.13
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
 
-      # Stage 3: Instalación de dependencias
-      - name: Instalación de dependencias
-        run: pip install -r requirements.txt
+      # Stage 3: Crear virtualenv e instalar dependencias
+      - name: Crear virtualenv e instalar dependencias
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
 
       # Stage 4: Instalar Snyk CLI
       - name: Instalar Snyk CLI
@@ -33,12 +37,16 @@ jobs:
       - name: Escaneo de vulnerabilidades con Snyk
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --file=requirements.txt --severity-threshold=high
+        run: |
+          source venv/bin/activate
+          snyk test --file=requirements.txt --severity-threshold=high
 
-      # Stage 6: Ejecución de pruebas
-      - name: Ejecución de pruebas
-        run: pytest tests/ -v
+      # Stage 6: Ejecutar pruebas unitarias
+      - name: Ejecutar pruebas
+        run: |
+          source venv/bin/activate
+          pytest tests/ -v
 
-      # Stage 7: Verificar que la imagen Docker se construye correctamente
+      # Stage 7: Construir imagen Docker
       - name: Build imagen Docker
         run: docker build -t devops-app .
