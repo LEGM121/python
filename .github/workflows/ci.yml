@@ -37,10 +37,9 @@ jobs:
       - name: Escaneo de vulnerabilidades con Snyk
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          run: snyk test --file=requirements.txt --org=ing.luisgonzalez1994 --severity-threshold=high
         run: |
           source venv/bin/activate
-          snyk test --file=requirements.txt --severity-threshold=high
+          snyk test --file=requirements.txt --org=ing.luisgonzalez1994 --severity-threshold=high
 
       # Stage 6: Ejecutar pruebas unitarias
       - name: Ejecutar pruebas
