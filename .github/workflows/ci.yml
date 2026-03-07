@@ -1,6 +1,3 @@
-# Pipeline CI - Integración Continua
-# Se ejecuta automáticamente en cada push o pull request a la rama main
-
 name: CI - Integración Continua
 
 on:
@@ -28,24 +25,20 @@ jobs:
       - name: Instalación de dependencias
         run: pip install -r requirements.txt
 
-        #Stage 4: Instalar Snyk CLI
+      # Stage 4: Instalar Snyk CLI
       - name: Instalar Snyk CLI
         run: npm install -g snyk
-        
+
+      # Stage 5: Escaneo de vulnerabilidades con Snyk
       - name: Escaneo de vulnerabilidades con Snyk
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-       run: snyk test --file=requirements.txt --severity-threshold=high
-     
+        run: snyk test --file=requirements.txt --severity-threshold=high
 
-      # Stage 6: Análisis de dependencias con Snyk
-      - name: Escaneo de vulnerabilidades con Snyk
-        run: snyk test --file=requirements.txt
-
-      # Stage 7: Ejecución de pruebas
+      # Stage 6: Ejecución de pruebas
       - name: Ejecución de pruebas
         run: pytest tests/ -v
 
-      # Stage 8: Verificar que la imagen Docker se construye correctamente
+      # Stage 7: Verificar que la imagen Docker se construye correctamente
       - name: Build imagen Docker
         run: docker build -t devops-app .
