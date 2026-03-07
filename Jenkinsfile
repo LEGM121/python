@@ -1,3 +1,4 @@
+
 // Pipeline CD - Entrega Continua
 // Define los stages para construir y publicar la imagen Docker en DockerHub
 
@@ -13,7 +14,18 @@ pipeline {
   }
 
   stages {
-
+    stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                    sonar-scanner \
+                    -Dsonar.projectKey=python-app \
+                    -Dsonar.sources=. \
+                    -Dsonar.host.url=http://sonarqube:9000
+                    '''
+                }
+            }
+        }
     // Stage 1: Clonar el repositorio
     stage('Clonar repositorio') {
       steps {
