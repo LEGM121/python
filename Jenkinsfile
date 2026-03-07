@@ -14,7 +14,15 @@ pipeline {
   }
 
   stages {
-    stage('SonarQube Analysis') {
+ 
+    // Stage 1: Clonar el repositorio
+    stage('Clonar repositorio') {
+      steps {
+        git branch: 'main', url: env.C_REPO_URL
+      }
+    }
+
+     stage('SonarQube Analysis') {
             steps {
                 script {
             def scannerHome = tool 'SonarScanner'
@@ -23,7 +31,7 @@ pipeline {
                 ${scannerHome}/bin/sonar-scanner \
                 -Dsonar.projectKey=python-main \
                 -Dsonar.sources=. \
-                -Dsonar.host.url=http://localhost:9000
+                -Dsonar.host.url=http://sonarqube:9000
 
                """
                  }
@@ -32,12 +40,7 @@ pipeline {
 
             }
         }
-    // Stage 1: Clonar el repositorio
-    stage('Clonar repositorio') {
-      steps {
-        git branch: 'main', url: env.C_REPO_URL
-      }
-    }
+
 
     // Stage 2: Construir la imagen Docker
     stage('Construir imagen Docker') {
