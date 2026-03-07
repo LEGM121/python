@@ -31,8 +31,9 @@ jobs:
         #Stage 4: Instalar Snyk CLI
       - name: Instalar Snyk CLI
         run: npm install -g snyk
-       name: Escaneo de vulnerabilidades con Snyk
-       env:
+        
+      - name: Escaneo de vulnerabilidades con Snyk
+        env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
        run: snyk test --file=requirements.txt --severity-threshold=high
      
