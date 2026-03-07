@@ -16,14 +16,20 @@ pipeline {
   stages {
     stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh '''
-                    sonar-scanner \
-                    -Dsonar.projectKey=python-main\
-                    -Dsonar.sources=. \
-                    -Dsonar.host.url=http://sonarqube:9000
-                    '''
+                script {
+            def scannerHome = tool 'SonarScanner'
+            withSonarQubeEnv('SonarQube') {
+                sh """
+                ${scannerHome}/bin/sonar-scanner \
+                -Dsonar.projectKey=python-main \
+                -Dsonar.sources=. \
+                -Dsonar.host.url=http://sonarqube:9000
+
+               """
+                 }
+
                 }
+
             }
         }
     // Stage 1: Clonar el repositorio
