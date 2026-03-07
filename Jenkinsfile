@@ -8,7 +8,7 @@ pipeline {
   environment {
     C_IMAGE_NAME      = 'devops-app'
     C_IMAGE_TAG       = 'latest'
-    C_REPO_URL        = 'https://github.com/GeronimoAv/lab-CI-CD-devops.git'
+    C_REPO_URL        = 'https://github.com/LEGM121/python.git'
     C_DOCKER_REGISTRY = 'docker.io'
   }
 
